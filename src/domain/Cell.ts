@@ -90,15 +90,15 @@ export default class Cell implements CellInfo {
     @observable color: string;
     @observable icon: object;
 
-    constructor(x: number, y: number, squareSize: number, color?: string) {
+    constructor(x: number, y: number, squareWidth: number, squareHeight: number, color?: string) {
         this.id = makeId(10);
         this.x = x;
         this.y = y;
         this.selected = false;
         this.canBeSelected = false;
-        this.top = ((squareSize - 1) - y) * 12.5;
+        this.top = ((squareHeight - 1) - y) * 12.5;  // Используем squareHeight вместо squareSize
         this.left = x * 12.5;
-        this.zIndex = (squareSize - 1) - y;
+        this.zIndex = (squareHeight - 1) - y;  // Используем squareHeight вместо squareSize
         if (color) {
             this.setColor(color);
         } else {
@@ -155,12 +155,12 @@ export default class Cell implements CellInfo {
         }
     }
 
-    setPosition(x: number, y: number, squareSize: number) {
+    setPosition(x: number, y: number, squareWidth: number, squareHeight: number) {
         this.x = x;
         this.y = y;
-        this.top = ((squareSize - 1) - y) * 12.5;
+        this.top = ((squareHeight - 1) - y) * 12.5; 
         this.left = x * 12.5;
-        this.zIndex = (squareSize - 1) - y;
+        this.zIndex = (squareHeight - 1) - y;  // Используем squareHeight вместо squareSize
         this.selected = false;
         this.canBeSelected = false;
     }
@@ -172,3 +172,4 @@ export default class Cell implements CellInfo {
         this.icon = icon;
     }
 }
+

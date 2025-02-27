@@ -5,6 +5,9 @@ import Grid, { MatchResult } from "../domain/Grid";
 
 const squareSize = 8;
 
+const squareWidth = 9;
+const squareHeight = 6;
+
 interface SimpleCell {
     x: number;
     y: number;
@@ -60,7 +63,7 @@ export default class GridStore {
 
 
     init() {
-        this.grid = new Grid(squareSize);
+        this.grid = new Grid(squareWidth, squareHeight);
         this.grid.cells.forEach(cell => {
             this.rootStore.statStore.addColorCount(cell.name, 1);
         });
@@ -78,7 +81,7 @@ export default class GridStore {
     @action
     reset = () => {
         this.rootStore.statStore.reset();
-        this.grid = new Grid(squareSize);
+        this.grid = new Grid(squareWidth, squareHeight);
         this.grid.cells.forEach(cell => {
             this.rootStore.statStore.addColorCount(cell.name, 1);
         });

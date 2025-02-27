@@ -28,15 +28,19 @@ export interface SimpleCell {
 
 export default class Grid {
 
-    private squareSize: number;
+    private squareWidth: number;
+    private squareHeight: number;
     @observable canMove: boolean = true;
     @observable cells: Cell[] = [];
     @observable selectedCell: Cell | null = null;
     @observable forInitGridStat: ForInitGrid = {x: [], y: []};
 
-    constructor(squareSize: number) {
-        this.squareSize = squareSize;
-        for (let i: number = 0; i < squareSize; i++) {
+    constructor(squareWidth: number, squareHeight: number) {
+        this.squareWidth = squareWidth;
+        this.squareHeight = squareHeight;
+        
+        // Инициализация статистики для каждой координаты сетки
+        for (let i: number = 0; i < squareWidth; i++) {
             this.forInitGridStat.x[i] = {
                 blue: 0,
                 red: 0,
@@ -54,8 +58,9 @@ export default class Grid {
                 grey: 0,
             }
         }
-        for (let x: number = 0; x < squareSize; x++) {
-            for (let y: number = 0; y < squareSize; y++) {
+        // Инициализация клеток с учётом новых размеров
+        for (let x: number = 0; x < squareWidth; x++) {
+            for (let y: number = 0; y < squareHeight; y++) {
                 const cell = this.getNextColor(x, y, true);
                 this.cells.push(cell);
             }
@@ -91,7 +96,7 @@ export default class Grid {
             color = 'grey';
         }
         if (color !== null) {
-            return new Cell(x, y, this.squareSize, color);
+            return new Cell(x, y, this.squareWidth, this.squareHeight, color);
         } else {
             return this.getNextColor(x, y, forInit, count + 1);
         }
@@ -153,7 +158,7 @@ export default class Grid {
                 if (alreadySelected) {
                     this.selectedCell = null;
                 } else {
-                    this.selectedCell = new Cell(0, 0, this.squareSize, 'white');
+                    this.selectedCell = new Cell(0, 0, this.squareWidth, this.squareHeight, 'white');
                     this.selectedCell.copy(cell);
                 }
                 this.setNearCanBeSelected(x, y, !alreadySelected);
@@ -178,8 +183,10 @@ export default class Grid {
         let currentColor: string = '';
         let currentSuite: number = 0;
         let elemInList: any;
-        for (let x: number = 0; x < this.squareSize; x++) {
-            for (let y: number = 0; y < this.squareSize; y++) {
+    
+        // Проход по всем ячейкам по строкам
+        for (let x: number = 0; x < this.squareWidth; x++) {  // Заменено на this.width
+            for (let y: number = 0; y < this.squareHeight; y++) {  // Заменено на this.height
                 let cell = this.get(x, y, false, this.cells);
                 if (cell === null) {
                     continue;
@@ -217,15 +224,18 @@ export default class Grid {
                         cellsToRemove.push({x, y});
                     }
                 }
-                if (y >= this.squareSize - 1 && currentSuite >= 2) {
+                if (y >= this.squareHeight - 1 && currentSuite >= 2) {  // Заменено на this.height
                     matches.push(new Match(currentColor, currentSuite, isCombo));
                 }
             }
         }
+    
         currentColor = '';
         currentSuite = 0;
-        for (let y: number = 0; y < this.squareSize; y++) {
-            for (let x: number = 0; x < this.squareSize; x++) {
+    
+        // Проход по всем ячейкам по столбцам
+        for (let y: number = 0; y < this.squareHeight; y++) {  // Заменено на this.height
+            for (let x: number = 0; x < this.squareWidth; x++) {  // Заменено на this.width
                 let cell = this.get(x, y, false, this.cells);
                 if (cell === null) {
                     continue;
@@ -264,11 +274,12 @@ export default class Grid {
                         cellsToRemove.push({x, y});
                     }
                 }
-                if (x >= this.squareSize - 1 && currentSuite >= 2) {
+                if (x >= this.squareWidth - 1 && currentSuite >= 2) {  // Заменено на this.width
                     matches.push(new Match(currentColor, currentSuite, isCombo));
                 }
             }
         }
+    
         const returnedCellsToRemove: SimpleCell[] = cellsToRemove.sort((a, b) => {
             if (a.y > b.y) {
                 return -1;
@@ -279,23 +290,25 @@ export default class Grid {
             }
             return 0;
         });
+    
         return {
             cellsToRemove: returnedCellsToRemove,
             matches
         };
     }
+    
 
     moveNewCells() {
-        for (let x: number = 0; x < this.squareSize; x++) {
-            for (let y: number = 0; y < this.squareSize; y++) {
+        for (let x: number = 0; x < this.squareWidth; x++) {  // Заменено на this.width
+            for (let y: number = 0; y < this.squareHeight; y++) {  // Заменено на this.height
                 let cell = this.get(x, y);
                 if (cell !== null && cell.top < 0) {
-                    cell.top = ((this.squareSize - 1) - y) * 12.5;
+                    cell.top = ((this.squareHeight - 1) - y) * 12.5;  // Заменено на this.height
                 }
             }
         }
     }
-
+    
     removeMatches(matches: SimpleCell[]): Cell[] {
         matches.forEach(simpleCell => {
             this.remove(simpleCell.x, simpleCell.y);
@@ -303,19 +316,19 @@ export default class Grid {
         const result = this.fillGrid(matches);
         return result;
     }
-
+    
     fillGrid(matches: SimpleCell[]): Cell[] {
         let newCells: Cell[] = [];
-        for (let x: number = 0; x < this.squareSize; x++) {
-            let newY: number = (this.squareSize - 1);
+        for (let x: number = 0; x < this.squareWidth; x++) {  // Заменено на this.width
+            let newY: number = (this.squareHeight - 1);  // Заменено на this.height
             const yMatches = matches.filter(m => m.x === x);
             yMatches.forEach(m => {
                 let newCell = this.getNextColor(x, newY, false);
-                newCell.top = ((((this.squareSize - 1) - newY) * 12.5) - 100);
+                newCell.top = ((((this.squareHeight - 1) - newY) * 12.5) - 100);  // Заменено на this.height
                 this.cells.push(newCell);
                 newCells.push(newCell);
                 newY--;
-            })
+            });
         }
         return newCells;
     }
@@ -325,26 +338,27 @@ export default class Grid {
         if (cell !== null) {
             const indexToRemove = this.cells.indexOf(cell);
             this.cells.splice(indexToRemove, 1);
-            for (let i: number = y; i < (this.squareSize - 1); i++) {
+            for (let i: number = y; i < (this.squareHeight - 1); i++) {  // Заменено на this.height
                 let editedCell = this.get(x, i + 1);
                 if (editedCell !== null) {
                     editedCell.y = i;
-                    editedCell.top = ((this.squareSize - 1) - i) * 12.5;
-                    editedCell.zIndex = (this.squareSize - 1) - i;
+                    editedCell.top = ((this.squareHeight - 1) - i) * 12.5;  // Заменено на this.height
+                    editedCell.zIndex = (this.squareHeight - 1) - i;  // Заменено на this.height
                 }
             }
         }
     }
-
+    
     invertCellsPosition(fx: number, fy: number, sx: number, sy: number) {
         let cellF = this.get(fx, fy);
         let cellS = this.get(sx, sy);
         if (cellF !== null) {
-            cellF.setPosition(sx, sy, this.squareSize);
+            cellF.setPosition(sx, sy, this.squareWidth, this.squareHeight);  // Заменено на this.height
         }
         if (cellS !== null) {
-            cellS.setPosition(fx, fy, this.squareSize);
+            cellS.setPosition(fx, fy, this.squareWidth, this.squareHeight);  // Заменено на this.height
         }
         return true;
     }
+    
 }

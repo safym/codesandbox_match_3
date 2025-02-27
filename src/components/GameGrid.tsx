@@ -29,8 +29,8 @@ export const GameGrid = () => {
   const classes = useStyles();
   const { info, select } = rootStore.gridStore;
   return (
-    <Grid item xs={12} md={8}>
-      <Paper className={classes.paper}>
+    // <Grid item xs={12} md={8}>
+      // <Paper className={classes.paper}>
         <div className={classes.container}>
           {info.grid.cells.map((cellInfo) => {
             if (cellInfo !== null) {
@@ -54,8 +54,8 @@ export const GameGrid = () => {
             }
           })}
         </div>
-      </Paper>
-    </Grid>
+    //   </Paper>
+    // </Grid>
   );
 };
 
