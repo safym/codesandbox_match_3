@@ -51,13 +51,6 @@ export const amberCell = {
     icon: BugReportIcon
 }
 
-export const greyCell = {
-    name: 'grey',
-    backgroundColor: blueGrey[500],
-    color: amber[700],
-    icon: ExtensionIcon
-}
-
 export interface CellPart {
     name: string;
     backgroundColor: string;
@@ -143,9 +136,9 @@ export default class Cell implements CellInfo {
             case 'amber':
                 data = { ...amberCell };
                 break;
-            case 'grey':
-                data = { ...greyCell };
-                break;
+            // case 'grey':
+            //     data = { ...greyCell };
+            //     break;
         }
         if (data !== null) {
             this.name = data.name;

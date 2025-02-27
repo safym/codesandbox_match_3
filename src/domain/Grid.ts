@@ -70,31 +70,28 @@ export default class Grid {
     private getNextColor(x: number, y: number, forInit: boolean, count: number = 0): Cell {
         const number = Math.random() * 100;
         let color = null;
-        if (number <= 16 && (!forInit || (this.forInitGridStat.x[x].blue < 2 && this.forInitGridStat.y[y].blue < 2))) {
+        if (number <= 20 && (!forInit || (this.forInitGridStat.x[x].blue < 2 && this.forInitGridStat.y[y].blue < 2))) {
             this.forInitGridStat.x[x].blue++;
             this.forInitGridStat.y[y].blue++;
             color = 'blue';
-        } else if (number <= 32 && (!forInit || (this.forInitGridStat.x[x].red < 2 && this.forInitGridStat.y[y].red < 2))) {
+        } else if (number <= 40 && (!forInit || (this.forInitGridStat.x[x].red < 2 && this.forInitGridStat.y[y].red < 2))) {
             this.forInitGridStat.x[x].red++;
             this.forInitGridStat.y[y].red++;
             color = 'red';
-        } else if (number <= 48 && (!forInit || (this.forInitGridStat.x[x].green < 2 && this.forInitGridStat.y[y].green < 2))) {
+        } else if (number <= 60 && (!forInit || (this.forInitGridStat.x[x].green < 2 && this.forInitGridStat.y[y].green < 2))) {
             this.forInitGridStat.x[x].green++;
             this.forInitGridStat.y[y].green++;
             color = 'green';
-        } else if (number <= 64 && (!forInit || (this.forInitGridStat.x[x].purple < 2 && this.forInitGridStat.y[y].purple < 2))) {
+        } else if (number <= 80 && (!forInit || (this.forInitGridStat.x[x].purple < 2 && this.forInitGridStat.y[y].purple < 2))) {
             this.forInitGridStat.x[x].purple++;
             this.forInitGridStat.y[y].purple++;
             color = 'purple';
-        } else if (number <= 80 && (!forInit || (this.forInitGridStat.x[x].amber < 2 && this.forInitGridStat.y[y].amber < 2))) {
+        } else if (!forInit || (this.forInitGridStat.x[x].amber < 2 && this.forInitGridStat.y[y].amber < 2) || count > 8) {
             this.forInitGridStat.x[x].amber++;
             this.forInitGridStat.y[y].amber++;
-            color = 'amber'
-        } else if (!forInit || (this.forInitGridStat.x[x].grey < 2 && this.forInitGridStat.y[y].grey < 2) || count > 8) {
-            this.forInitGridStat.x[x].grey++;
-            this.forInitGridStat.y[y].grey++;
-            color = 'grey';
+            color = "amber";
         }
+
         if (color !== null) {
             return new Cell(x, y, this.squareWidth, this.squareHeight, color);
         } else {

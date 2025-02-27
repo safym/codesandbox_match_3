@@ -8,7 +8,6 @@ export default class StatStore {
     @observable green: number = 0;
     @observable purple: number = 0;
     @observable amber: number = 0;
-    @observable grey: number = 0;
     @observable blueCount: number = 0;
     @observable redCount: number = 0;
     @observable greenCount: number = 0;
@@ -33,7 +32,6 @@ export default class StatStore {
             green: this.green,
             purple: this.purple,
             amber: this.amber,
-            grey: this.grey,
             match3: this.match3,
             match4: this.match4,
             match5: this.match5,
@@ -89,9 +87,6 @@ export default class StatStore {
                 break;
             case 'amber':
                 this.amber = this.amber + number;
-                break;
-            case 'grey':
-                this.grey = this.grey + number;
                 break;
         }
     }

@@ -45,9 +45,6 @@ export function SideCard() {
               <Typography variant={"body1"}>
                 Amber count : {info.amberCount}
               </Typography>
-              <Typography variant={"body1"}>
-                Grey count : {info.greyCount}
-              </Typography>
             </Grid>
             <Grid item xs={6} lg={12}>
               <Typography variant="h5" component="h2">
@@ -67,7 +64,7 @@ export function SideCard() {
               <Typography variant={"body1"}>Green : {info.green}</Typography>
               <Typography variant={"body1"}>Purple : {info.purple}</Typography>
               <Typography variant={"body1"}>Amber : {info.amber}</Typography>
-              <Typography variant={"body1"}>Grey : {info.grey}</Typography>
+              {/* <Typography variant={"body1"}>Grey : {info.grey}</Typography> */}
             </Grid>
           </Grid>
         </CardContent>
